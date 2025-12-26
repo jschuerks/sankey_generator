@@ -41,10 +41,28 @@ class MainController(Observable):
     def set_month(self, month: str):
         """Set the last used month."""
         self.current_month = int(month)
+        """Set the last used month (safely handle empty/invalid input and validate 1-12)."""
+        month_str = (month or "").strip()
+        if not month_str:
+            self.current_month = None
+            return
+        try:
+            m = int(month_str)
+            #self.current_month = m if 1 <= m <= 12 else None
+        except ValueError:
+            self.current_month = None
+
 
     def set_issue_level(self, issue_level: str):
-        """Set the last used issue level."""
-        self.current_issue_level = int(issue_level)
+        """Set the last used issue level (safely handle empty/invalid input)."""
+        issue_str = (issue_level or "").strip()
+        if not issue_str:
+            self.current_issue_level = None
+            return
+        try:
+            self.current_issue_level = int(issue_str)
+        except ValueError:
+            self.current_issue_level = None
 
     def _save_last_used_values_to_config(self):
         """Save the last used values."""
@@ -89,6 +107,7 @@ class MainController(Observable):
             current_month = config.last_used_month
             current_issue_level = config.last_used_issue_level
             if not current_year or not current_month or not current_issue_level:
+                print("Hoppla")
                 # TODO: Replace with validation -> Disbale button on errors
                 return
 
@@ -111,6 +130,7 @@ class MainController(Observable):
 
     def _generate_sankey_html(self, year, month, issue_level) -> str:
         """Generate the Sankey diagram for the given year, month and issue level."""
+        print("HHUUHU")
         # Parse CSV and plot Sankey diagram
         income_node = self.finanzguru_parser_service.parse_csv(
             year,

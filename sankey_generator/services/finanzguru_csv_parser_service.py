@@ -56,8 +56,9 @@ class FinanzguruCsvParserService:
         # fill all empty cells in each column with "empty"
         df = df.fillna('empty')
 
-        if month is None:
+        if month == 13:
             df = df.loc[(df[self.analysis_year_column_name] == year)]
+            print("Here")
         else:
             df = df.loc[(df[self.analysis_month_column_name] == f'{year}-{month:02d}')]
 
@@ -170,7 +171,7 @@ class FinanzguruCsvParserService:
         if month is not None:
             if self.analysis_month_column_name is None:
                 raise ValueError('analysis_month_column_name must be set if month is not None')
-
+        print("HALLO")
         df: pd.DataFrame = self._get_relevant_data_from_csv(
             self.file_path,
             year,

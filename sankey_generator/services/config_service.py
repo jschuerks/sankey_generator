@@ -66,16 +66,16 @@ class ConfigService:
 
     def _parseIncomeReferenceAccounts(self, income_reference_accounts: dict) -> list[AccountSource]:
         """Create the income reference accounts from the config file."""
-        income_reference_accounts: list[AccountSource] = []
+        income_reference_accounts_new: list[AccountSource] = []
         for account in income_reference_accounts:
             account_source = AccountSource(account['account_name'], account['iban'])
             for income_filter in account['income_filters']:
                 transaction_source = IncomeFilter(income_filter['sankey_label'], income_filter['csv_column_name'])
                 transaction_source.csv_value_filters = income_filter.get('csv_value_filters', [])
                 account_source.income_filters.append(transaction_source)
-            income_reference_accounts.append(account_source)
+            income_reference_accounts_new.append(account_source)
 
-        return income_reference_accounts
+        return income_reference_accounts_new
 
     def _parseIssuesHierarchy(self, issues_hierarchy: list[dict]) -> IssueCategory:
         """Create the issues hierarchy from the config file."""
